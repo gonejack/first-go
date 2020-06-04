@@ -1,4 +1,4 @@
-package cgo
+package main
 
 import "C"
 import (
@@ -34,4 +34,7 @@ func Log(msg string) int {
 	count++
 	return count
 }
-func main() {}
+
+func main() {
+
+}

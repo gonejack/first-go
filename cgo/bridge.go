@@ -1,4 +1,4 @@
-package cgo
+package main
 
 /**
 typedef void (*cb)(char* extra, char* data);
