@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	gioui.org v0.0.0-20200527151211-266b01bb5d54
+	github.com/ClickHouse/clickhouse-go v1.4.3
 	github.com/Shopify/sarama v1.22.1
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
 	github.com/davecgh/go-spew v1.1.1

@@ -25,7 +25,7 @@ func main() {
 	var m = make(map[Key]Log)
 	var c = make(chan Log)
 
-	time.AfterFunc(time.Second * 10, func() {close(c)})
+	time.AfterFunc(time.Second*10, func() { close(c) })
 
 	go func() {
 		for range time.Tick(time.Second) {

@@ -8,7 +8,7 @@
       <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
     </data-source>
     <data-source source="LOCAL" name="test" uuid="a3e66962-c9e9-4afe-8fb7-0a111e64fd10">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>8f15fb5b-3e27-4d6b-8af9-4f4d10c64f5b</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/test.db</jdbc-url>
@@ -20,6 +20,12 @@
           <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.25.1/license.txt</url>
         </library>
       </libraries>
+    </data-source>
+    <data-source source="LOCAL" name="sdtd_td@192.168.11.37" uuid="b538249c-84e1-496f-9438-e574ac4b29c8">
+      <driver-ref>clickhouse</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>ru.yandex.clickhouse.ClickHouseDriver</jdbc-driver>
+      <jdbc-url>jdbc:clickhouse://192.168.11.37:8123/sdtd_td</jdbc-url>
     </data-source>
   </component>
 </project>
