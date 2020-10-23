@@ -17,7 +17,6 @@ require (
 	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/prometheus/client_golang v1.8.0 // indirect
 	github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da
-	go.etcd.io/etcd v3.3.25+incompatible
 	go.uber.org/zap v1.16.0 // indirect
 	golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6
 	google.golang.org/grpc v1.33.1 // indirect

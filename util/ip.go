@@ -1,5 +1,11 @@
 package util
 
+import (
+	"fmt"
+	"net"
+	"time"
+)
+
 func getIp() string {
 	cn, err := net.DialTimeout("udp", "8.8.8.8:80", time.Second)
 
