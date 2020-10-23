@@ -31,23 +31,26 @@ func consume() {
 	consumerId := fmt.Sprintf("%s|%s", topic, groupId)
 
 	consumer := &consumeWrapper{
-		Addrs:   []string{"127.0.0.1:9090", "127.0.0.1:9091", "127.0.0.1:9092"},
+		Addrs: []string{
+			"127.0.0.1:9092",
+			"127.0.0.1:9093",
+		},
 		Topic:   topic,
 		GroupId: groupId,
-		SASL: struct {
-			Enable   bool
-			User     string
-			Password string
-		}{
-			Enable:   true,
-			User:     "admin",
-			Password: "admin",
-		},
+		//SASL: struct {
+		//	Enable   bool
+		//	User     string
+		//	Password string
+		//}{
+		//	Enable:   true,
+		//	User:     "admin",
+		//	Password: "admin",
+		//},
 		mu: sync.RWMutex{},
 	}
 
 	err := consumer.addSubscriber(func(topic string, byts []byte) error {
-		logger.Infof("topic=%s msg=%s", topic, byts)
+		logger.Infof("收到 topic=%s msg=%s", topic, byts)
 
 		return nil
 	}).start() // 启动消费
@@ -62,11 +65,14 @@ func consume() {
 func produce() {
 	config := sarama.NewConfig()
 	config.Producer.Return.Errors = true // 消费者需要会报错
-	config.Net.SASL.Enable = true        // 启用密码验证
-	config.Net.SASL.User = "admin"
-	config.Net.SASL.Password = "admin"
+	//config.Net.SASL.Enable = true        // 启用密码验证
+	//config.Net.SASL.User = "admin"
+	//config.Net.SASL.Password = "admin"
 
-	producer, err := sarama.NewAsyncProducer([]string{"127.0.0.1:9090", "127.0.0.1:9091", "127.0.0.1:9092"}, config)
+	producer, err := sarama.NewAsyncProducer([]string{
+		"127.0.0.1:9092",
+		"127.0.0.1:9093",
+	}, config)
 	if err == nil {
 		wrapper := &producerWrapper{
 			producer: producer,
@@ -76,13 +82,17 @@ func produce() {
 		wrapper.start()
 
 		go func() {
+			topic := "test"
 			for {
 				time.Sleep(time.Second)
 
+				msg := fmt.Sprintf("%d", time.Now().Unix())
 				wrapper.input() <- &sarama.ProducerMessage{
 					Topic: "test",
-					Value: sarama.ByteEncoder(fmt.Sprintf("%d", time.Now().Unix())),
+					Value: sarama.ByteEncoder(msg),
 				}
+
+				logger.Infof("发送topic=%s, msg=%s", topic, msg)
 			}
 		}()
 	} else {

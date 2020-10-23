@@ -11,12 +11,12 @@ import (
 
 func main() {
 	// Create .gz file to write to
-	outputFile, err := os.Create("test.txt.gz")
+	out, err := os.Create("test.txt.gz")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	gzipw := gzip.NewWriter(outputFile)
+	gzipw := gzip.NewWriter(out)
 	defer gzipw.Close()
 
 	tarw := tar.NewWriter(gzipw)
