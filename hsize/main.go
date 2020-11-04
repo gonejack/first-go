@@ -5,11 +5,31 @@ import (
 	"fmt"
 	"math/big"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
+const help = `Examples:
+command:
+  {exec} 123 45678
+print:
+  123 => 123B
+  45678 => 44.61KB
+
+command: 
+  echo 123 | {exec}
+print:
+  123 => 123B
+`
+
 func main() {
 	if len(os.Args) > 1 {
+		for _, arg := range os.Args {
+			if arg == "-h" || arg == "--help" {
+				fmt.Print(strings.ReplaceAll(help, "{exec}", filepath.Base(os.Args[0])))
+				return
+			}
+		}
 		for i, arg := range os.Args {
 			if i > 0 {
 				parse(arg)
