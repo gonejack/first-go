@@ -45,10 +45,10 @@ func main() {
 }
 
 var units = [...]string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"}
-var scale = new(big.Rat).SetInt64(1 << 10)
+var scale = new(big.Float).SetInt64(1 << 10)
 
 func parse(text string) {
-	size, ok := new(big.Rat).SetString(strings.TrimSpace(text))
+	size, ok := new(big.Float).SetString(strings.TrimSpace(text))
 	if !ok {
 		fmt.Printf("can not parse \"%s\"\n", text)
 		return
@@ -62,10 +62,9 @@ func parse(text string) {
 			break
 		}
 	}
+	val = size.Text('f', 2)
 	if size.IsInt() {
-		val = size.RatString()
-	} else {
-		val = size.FloatString(2)
+		val = val[:len(val)-3]
 	}
 	fmt.Printf("%s => %s%s\n", text, val, unit)
 }
