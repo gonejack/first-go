@@ -50,7 +50,7 @@ func (c *consumer) stop() (err error) {
 	if err == nil {
 		logger.Infof("消费组[topic=%s, groupId=%s]已关闭", c.Topic, c.GroupId)
 	} else {
-		logger.Errorf("关闭消费组[topic=%s, groupId=%s]出错: %s", err)
+		logger.Errorf("关闭消费组[topic=%s, groupId=%s]出错: %s", c.Topic, c.GroupId, err)
 	}
 
 	return
