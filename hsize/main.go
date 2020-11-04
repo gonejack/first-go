@@ -44,7 +44,7 @@ func main() {
 	}
 }
 
-var units = []string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"}
+var units = [...]string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"}
 var scale = new(big.Rat).SetInt64(1 << 10)
 
 func parse(text string) {
