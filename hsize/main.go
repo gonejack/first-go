@@ -24,16 +24,14 @@ print:
 
 func main() {
 	if len(os.Args) > 1 {
-		for _, arg := range os.Args {
+		for _, arg := range os.Args[1:] {
 			if arg == "-h" || arg == "--help" {
 				fmt.Print(strings.ReplaceAll(help, "{exec}", filepath.Base(os.Args[0])))
 				return
 			}
 		}
-		for i, arg := range os.Args {
-			if i > 0 {
-				parse(arg)
-			}
+		for _, arg := range os.Args[1:] {
+			parse(arg)
 		}
 	} else {
 		scanner := bufio.NewScanner(os.Stdin)
@@ -51,22 +49,23 @@ var scale = new(big.Rat).SetInt64(1 << 10)
 
 func parse(text string) {
 	size, ok := new(big.Rat).SetString(strings.TrimSpace(text))
-	if ok {
-		var unit, val string
-		for _, unit = range units {
-			if size.Cmp(scale) > -1 {
-				size = size.Quo(size, scale)
-			} else {
-				break
-			}
-		}
-		if size.IsInt() {
-			val = size.RatString()
-		} else {
-			val = size.FloatString(2)
-		}
-		fmt.Printf("%s => %s%s\n", text, val, unit)
-	} else {
+	if !ok {
 		fmt.Printf("can not parse \"%s\"\n", text)
+		return
 	}
+
+	var unit, val string
+	for _, unit = range units {
+		if size.Cmp(scale) > -1 {
+			size = size.Quo(size, scale)
+		} else {
+			break
+		}
+	}
+	if size.IsInt() {
+		val = size.RatString()
+	} else {
+		val = size.FloatString(2)
+	}
+	fmt.Printf("%s => %s%s\n", text, val, unit)
 }
