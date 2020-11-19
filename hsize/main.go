@@ -45,26 +45,32 @@ func main() {
 }
 
 var units = [...]string{"B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"}
-var scale = new(big.Float).SetInt64(1 << 10)
+var scale = big.NewInt(1024)
 
-func parse(text string) {
-	size, ok := new(big.Float).SetString(strings.TrimSpace(text))
+func parse(raw string) {
+	size, ok := new(big.Int).SetString(strings.TrimSpace(raw), 10)
 	if !ok {
-		fmt.Printf("can not parse \"%s\"\n", text)
+		fmt.Printf("can not parse \"%s\"\n", raw)
 		return
 	}
 
-	var unit, val string
-	for _, unit = range units {
-		if size.Cmp(scale) > -1 {
-			size = size.Quo(size, scale)
+	var value, label string
+	var unit = big.NewInt(1)
+	var next = big.NewInt(0).Set(scale)
+	for _, label = range units {
+		if size.Cmp(next) >= 0 {
+			unit = unit.Mul(unit, scale)
+			next = next.Mul(next, scale)
 		} else {
 			break
 		}
 	}
-	val = size.Text('f', 2)
-	if size.IsInt() {
-		val = val[:len(val)-3]
+
+	rat := new(big.Rat).SetFrac(size, unit)
+	if rat.IsInt() {
+		value = rat.FloatString(0)
+	} else {
+		value = rat.FloatString(2)
 	}
-	fmt.Printf("%s => %s%s\n", text, val, unit)
+	fmt.Printf("%s => %s%s\n", raw, value, label)
 }
