@@ -24,9 +24,7 @@ func main() {
 
 	client := helloworld.NewGreeterClient(conn)
 	{
-		var n = 100
-		for n > 0 {
-			n -= 1
+		for n := 100; n > 0; n-- {
 			timeout, _ := context.WithTimeout(context.Background(), time.Second)
 			request := &helloworld.HelloRequest{Name: "request"}
 			reply, err := client.SayHello(timeout, request)

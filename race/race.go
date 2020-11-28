@@ -1,23 +1,22 @@
-package race
+package main
 
 import (
 	"fmt"
 	"time"
 )
 
-func Run() {
+func main() {
 	i := 0
 
 	go func() {
 		for {
-			i++ // write i
-
+			i++
 			time.Sleep(time.Nanosecond)
 		}
 	}()
 
 	for {
-		time.Sleep(time.Second)
-		fmt.Println(i) // read i
+		time.Sleep(time.Millisecond)
+		fmt.Println(i)
 	}
 }

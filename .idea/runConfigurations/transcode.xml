@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="transcode" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="first-go" />
+    <working_directory value="$PROJECT_DIR$" />
+    <parameters value="激活说明-图文教程.txt -v" />
+    <kind value="PACKAGE" />
+    <filePath value="$PROJECT_DIR$/race/race.go" />
+    <package value="first-go/transcode" />
+    <directory value="$PROJECT_DIR$" />
+    <output_directory value="$PROJECT_DIR$/bin" />
+    <method v="2" />
+  </configuration>
+</component>
