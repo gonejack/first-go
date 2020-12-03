@@ -1,10 +1,15 @@
 package main
 
 import (
-	"github.com/davecgh/go-spew/spew"
-	"path/filepath"
+	"fmt"
+	"strconv"
 )
 
 func main() {
-	spew.Dump(filepath.ToSlash(`c:\windows\abc`))
+
+	fmt.Printf("%8s\n", strconv.FormatInt(0x20, 2))
+	fmt.Printf("%8s\n", strconv.FormatInt(int64('A'), 2))
+	fmt.Printf("%8s\n", strconv.FormatInt(int64('a'), 2))
+	fmt.Printf("%8s\n", strconv.FormatInt(int64('Z'), 2))
+	fmt.Printf("%8s\n", strconv.FormatInt(int64('z'), 2))
 }
