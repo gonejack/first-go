@@ -2,15 +2,17 @@ package main
 
 var changes = [...][2]int{{0, -1}, {1, 0}, {0, 1}, {-1, 0}}
 
-type researchList []*research
+type (
+	research struct {
+		nmap      nmap
+		direction *direction
+		prev      *research
+		spaceX    int
+		spaceY    int
+	}
 
-type research struct {
-	nmap      nmap
-	direction *direction
-	prev      *research
-	spaceX    int
-	spaceY    int
-}
+	researchList []*research
+)
 
 func (r *research) moveForward(dir direction) {
 	targetX, targetY := r.spaceX+changes[dir][0], r.spaceY+changes[dir][1]

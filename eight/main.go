@@ -5,42 +5,37 @@ import (
 	"strings"
 )
 
-type direction int
-
 const (
 	UP direction = iota
 	RIGHT
 	DOWN
 	LEFT
+
+	N = 3
+)
+
+var (
+	directions     = [...]direction{UP, RIGHT, DOWN, LEFT}
+	directionTexts = [...]string{"上", "右", "下", "左"}
+
+	want = nmap{{1, 2, 3}, {4, 5, 6}, {7, 8, 0}}
+)
+
+type (
+	direction int
+	nmap      [N][N]int
+	nmapSet   map[nmap]struct{}
+
+	eight struct {
+		nmap
+		moves      []direction
+		researched nmapSet
+		researches researchList
+	}
 )
 
 func (d direction) String() string {
-	switch d {
-	case UP:
-		return "上"
-	case RIGHT:
-		return "右"
-	case DOWN:
-		return "下"
-	case LEFT:
-		return "左"
-	}
-	return "x"
-}
-
-var want = nmap{{1, 2, 3}, {4, 5, 6}, {7, 8, 0}}
-var directions = [...]direction{UP, RIGHT, DOWN, LEFT}
-
-const N = 3
-
-type nmap [N][N]int
-type nmapSet map[nmap]struct{}
-
-type eight struct {
-	nmap
-	moves      []direction
-	researched nmapSet
-	researches researchList
+	return directionTexts[d]
 }
 
 func (e *eight) resolve() bool {
@@ -101,12 +96,12 @@ func printNmap(m nmap) {
 	fmt.Println(strings.Repeat("-", 3))
 }
 func printMoves(moves []direction) {
-	var chinese []string
+	var chars []string
 	var length = len(moves)
 	for i := length - 1; i >= 0; i-- {
-		chinese = append(chinese, moves[i].String())
+		chars = append(chars, moves[i].String())
 	}
-	fmt.Println(strings.Join(chinese, " "))
+	fmt.Println(strings.Join(chars, " "))
 }
 func new8(m [3][3]int) *eight {
 	return &eight{
