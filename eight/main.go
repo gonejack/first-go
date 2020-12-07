@@ -103,7 +103,7 @@ func printMoves(moves []direction) {
 	}
 	fmt.Println(strings.Join(chars, " "))
 }
-func new8(m [3][3]int) *eight {
+func newEight(m [3][3]int) *eight {
 	return &eight{
 		nmap:       m,
 		researched: make(nmapSet),
@@ -112,10 +112,11 @@ func new8(m [3][3]int) *eight {
 }
 
 func main() {
-	m := [N][N]int{
-		{3, 4, 1},
-		{5, 6, 0},
-		{8, 2, 7},
-	}
-	new8(m).resolve()
+	newEight(
+		nmap{
+			{3, 4, 1},
+			{5, 6, 0},
+			{8, 2, 7},
+		},
+	).resolve()
 }

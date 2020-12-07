@@ -7,8 +7,8 @@ type (
 		nmap      nmap
 		direction *direction
 		prev      *research
-		spaceX    int
-		spaceY    int
+
+		spaceX, spaceY int
 	}
 
 	researchList []*research
