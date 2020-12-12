@@ -1,26 +1,30 @@
 package main
 
-var changes = [...][2]int{{0, -1}, {1, 0}, {0, 1}, {-1, 0}}
+var changes = [...][2]int{
+	{0, -1},
+	{1, 0},
+	{0, 1},
+	{-1, 0},
+}
 
-type (
-	research struct {
-		nmap      nmap
-		direction *direction
-		prev      *research
+type research struct {
+	t9
 
-		spaceX, spaceY int
-	}
+	moveDirection  *direction
+	parentResearch *research
 
-	researchList []*research
-)
+	spaceX int
+	spaceY int
+}
+type researchList []*research
 
-func (r *research) moveForward(dir direction) {
+func (r *research) move(dir direction) {
 	targetX, targetY := r.spaceX+changes[dir][0], r.spaceY+changes[dir][1]
-	r.nmap[targetY][targetX], r.nmap[r.spaceY][r.spaceX] = 0, r.nmap[targetY][targetX]
+	r.t9[targetY][targetX], r.t9[r.spaceY][r.spaceX] = 0, r.t9[targetY][targetX]
 	r.spaceX, r.spaceY = targetX, targetY
 }
-func (r *research) moveBack(dir direction) {
-	r.moveForward((dir + 2) % 4)
+func (r *research) revert(dir direction) {
+	r.move((dir + 2) % 4)
 }
 func (r *research) canMove(d direction) (can bool) {
 	switch d {
@@ -36,9 +40,9 @@ func (r *research) canMove(d direction) (can bool) {
 	return
 }
 func (r *research) setup() {
-	for y := range r.nmap {
-		for x := range r.nmap[y] {
-			if r.nmap[y][x] == 0 {
+	for y := range r.t9 {
+		for x := range r.t9[y] {
+			if r.t9[y][x] == 0 {
 				r.spaceX, r.spaceY = x, y
 				return
 			}
@@ -46,11 +50,11 @@ func (r *research) setup() {
 	}
 }
 
-func newResearch(nmap nmap, dir *direction, prevResearch *research) (r *research) {
+func newResearch(t9 t9, direction *direction, parentResearch *research) (r *research) {
 	r = &research{
-		nmap:      nmap,
-		direction: dir,
-		prev:      prevResearch,
+		t9:             t9,
+		moveDirection:  direction,
+		parentResearch: parentResearch,
 	}
 	r.setup()
 

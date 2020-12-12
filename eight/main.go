@@ -5,72 +5,75 @@ import (
 	"strings"
 )
 
-const (
-	UP direction = iota
-	RIGHT
-	DOWN
-	LEFT
-
-	N = 3
-)
-
-var (
-	directions     = [...]direction{UP, RIGHT, DOWN, LEFT}
-	directionTexts = [...]string{"上", "右", "下", "左"}
-
-	want = nmap{{1, 2, 3}, {4, 5, 6}, {7, 8, 0}}
-)
-
-type (
-	direction int
-	nmap      [N][N]int
-	nmapSet   map[nmap]struct{}
-
-	eight struct {
-		nmap
-		moves      []direction
-		researched nmapSet
-		researches researchList
-	}
-)
+type direction int
 
 func (d direction) String() string {
 	return directionTexts[d]
 }
 
+const (
+	UP direction = iota
+	RIGHT
+	DOWN
+	LEFT
+)
+
+var (
+	directions     = [...]direction{UP, RIGHT, DOWN, LEFT}
+	directionTexts = [...]string{"上", "右", "下", "左"}
+)
+
+type (
+	t9    [3][3]int
+	t9set map[t9]struct{}
+)
+
+var want = t9{
+	{1, 2, 3},
+	{4, 5, 6},
+	{7, 8, 0},
+}
+
+type eight struct {
+	t9
+	moves      []direction
+	researched t9set
+	researches researchList
+}
+
 func (e *eight) resolve() bool {
-	if e.nmap == want {
+	if e.t9 == want {
 		return true
 	} else {
-		e.addResearched(e.nmap)
-		e.addResearch(newResearch(e.nmap, nil, nil))
+		e.addResearched(e.t9)
+		e.enqueueResearch(newResearch(e.t9, nil, nil))
 		return e.doResearch()
 	}
 }
 func (e *eight) doResearch() bool {
-	var r *research
+	var rs *research
 
 	for len(e.researches) > 0 {
-		r, e.researches = e.researches[0], e.researches[1:]
+		rs, e.researches = e.researches[0], e.researches[1:]
 
-		if r.nmap == want {
-			for r != nil && r.direction != nil {
-				e.moves = append(e.moves, *r.direction)
-				r = r.prev
+		if rs.t9 == want {
+			for rs != nil && rs.moveDirection != nil {
+				e.moves = append(e.moves, *rs.moveDirection)
+				rs = rs.parentResearch
 			}
-			printNmap(e.nmap)
+			printNmap(e.t9)
 			printMoves(e.moves)
 			return true
 		} else {
 			for i := range directions {
 				var dir = directions[i]
-				if r.canMove(dir) {
-					r.moveForward(dir)
-					if !e.isResearched(r.nmap) {
-						e.addResearched(r.nmap)
-						e.addResearch(newResearch(r.nmap, &dir, r))
+				if rs.canMove(dir) {
+					rs.move(dir)
+					if !e.isResearched(rs.t9) {
+						e.addResearched(rs.t9)
+						e.enqueueResearch(newResearch(rs.t9, &dir, rs))
 					}
-					r.moveBack(dir)
+					rs.revert(dir)
 				}
 			}
 		}
@@ -78,18 +81,28 @@ func (e *eight) doResearch() bool {
 
 	return false
 }
-func (e *eight) addResearch(search *research) {
+func (e *eight) enqueueResearch(search *research) {
 	e.researches = append(e.researches, search)
 }
-func (e *eight) addResearched(nmap nmap) {
-	e.researched[nmap] = struct{}{}
+func (e *eight) addResearched(t9 t9) {
+	e.researched[t9] = struct{}{}
 }
-func (e *eight) isResearched(nmap nmap) (exist bool) {
-	_, exist = e.researched[nmap]
+func (e *eight) isResearched(t9 t9) (exist bool) {
+	_, exist = e.researched[t9]
 	return
 }
 
-func printNmap(m nmap) {
+func newResolver(data t9) (e *eight) {
+	e = &eight{
+		t9: data,
+
+		researched: make(t9set),
+		researches: make(researchList, 0),
+	}
+	return
+}
+
+func printNmap(m t9) {
 	for _, r := range m {
 		fmt.Println(r)
 	}
@@ -103,20 +116,13 @@ func printMoves(moves []direction) {
 	}
 	fmt.Println(strings.Join(chars, " "))
 }
-func newEight(m [3][3]int) *eight {
-	return &eight{
-		nmap:       m,
-		researched: make(nmapSet),
-		researches: make(researchList, 0),
-	}
-}
 
 func main() {
-	newEight(
-		nmap{
-			{3, 4, 1},
-			{5, 6, 0},
-			{8, 2, 7},
-		},
-	).resolve()
+	data := t9{
+		{3, 4, 1},
+		{5, 6, 0},
+		{8, 2, 7},
+	}
+
+	newResolver(data).resolve()
 }
