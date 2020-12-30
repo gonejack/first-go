@@ -7,6 +7,7 @@ require (
 	github.com/ClickHouse/clickhouse-go v1.4.3
 	github.com/Jeffail/gabs/v2 v2.6.0
 	github.com/Shopify/sarama v1.22.1
+	github.com/apache/pulsar-client-go v0.3.0
 	github.com/bamzi/jobrunner v1.0.0
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
 	github.com/coreos/etcd v2.3.8+incompatible
@@ -22,8 +23,6 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/jordan-wright/email v4.0.1-0.20200917010138-e1c00e156980+incompatible
 	github.com/mbobakov/grpc-consul-resolver v1.4.3
-	github.com/onsi/ginkgo v1.8.0 // indirect
-	github.com/onsi/gomega v1.5.0 // indirect
 	github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da
 	github.com/sirupsen/logrus v1.7.0
 	github.com/slyrz/warc v0.0.0-20150806225202-a50edd19b690
@@ -34,5 +33,4 @@ require (
 	golang.org/x/sys v0.0.0-20201015000850-e3ed0017c211 // indirect
 	golang.org/x/text v0.3.2
 	google.golang.org/grpc v1.33.2
-	gopkg.in/yaml.v2 v2.3.0 // indirect
 )
