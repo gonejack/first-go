@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/apache/pulsar-client-go/pulsar"
 	"log"
 	"time"
+
+	"github.com/apache/pulsar-client-go/pulsar"
 )
 
 func main() {

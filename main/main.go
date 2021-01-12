@@ -1,12 +1,17 @@
 package main
 
 import (
-	"fmt"
-	"strconv"
+	"github.com/davecgh/go-spew/spew"
+	"net/url"
 )
 
 func main() {
-	fmt.Printf("%8s\n", strconv.FormatInt(1<<2>>2, 2))
-	fmt.Printf("%8s\n", strconv.FormatInt(1<<4>>2, 2))
+	u := "http%3A%2F%2Flocalhost%3A9001%2Fios"
+	spew.Dump(u)
 
+	u, _ = url.QueryUnescape(u)
+	spew.Dump(u)
+
+	u, _ = url.QueryUnescape(u)
+	spew.Dump(u)
 }
