@@ -10,6 +10,8 @@ require (
 	github.com/apache/pulsar-client-go v0.3.0
 	github.com/bamzi/jobrunner v1.0.0
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
+	github.com/cheekybits/genny v1.0.0
+	github.com/cheggaaa/pb/v3 v3.0.5
 	github.com/coreos/etcd v2.3.8+incompatible
 	github.com/davecgh/go-spew v1.1.1
 	github.com/emersion/go-imap v1.0.6
@@ -18,19 +20,23 @@ require (
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/gonejack/glogger v1.0.2
+	github.com/google/go-cmp v0.5.2 // indirect
+	github.com/gosuri/uilive v0.0.4 // indirect
+	github.com/gosuri/uiprogress v0.0.1
 	github.com/hashicorp/consul/api v1.3.0
 	github.com/jinzhu/gorm v1.9.12
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/jordan-wright/email v4.0.1-0.20200917010138-e1c00e156980+incompatible
 	github.com/mbobakov/grpc-consul-resolver v1.4.3
 	github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da
+	github.com/schollz/progressbar/v3 v3.7.3
 	github.com/sirupsen/logrus v1.7.0
 	github.com/slyrz/warc v0.0.0-20150806225202-a50edd19b690
+	github.com/stretchr/testify v1.6.1 // indirect
 	go.uber.org/zap v1.16.0
 	golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
-	golang.org/x/sys v0.0.0-20201015000850-e3ed0017c211 // indirect
-	golang.org/x/text v0.3.2
+	golang.org/x/text v0.3.3
 	google.golang.org/grpc v1.33.2
 )

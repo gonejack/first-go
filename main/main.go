@@ -3,15 +3,14 @@ package main
 import (
 	"github.com/davecgh/go-spew/spew"
 	"net/url"
+	"path/filepath"
 )
 
 func main() {
-	u := "http%3A%2F%2Flocalhost%3A9001%2Fios"
-	spew.Dump(u)
+	s := "https://cdn.sspai.com/article/d3d0016c-6dbc-72c5-9ed2-bfa7fbb5b323.png?imageMogr2/auto-orient/quality/95/thumbnail/!690x690r/gravity/Center/crop/690x690/interlace/1"
 
-	u, _ = url.QueryUnescape(u)
-	spew.Dump(u)
+	spew.Dump(filepath.Base(s))
 
-	u, _ = url.QueryUnescape(u)
-	spew.Dump(u)
+	u, _ := url.Parse(s)
+	spew.Dump(filepath.Base(u.Path))
 }
