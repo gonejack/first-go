@@ -9,6 +9,7 @@ require (
 	github.com/Shopify/sarama v1.22.1
 	github.com/apache/pulsar-client-go v0.3.0
 	github.com/bamzi/jobrunner v1.0.0
+	github.com/bmaupin/go-epub v0.5.3
 	github.com/bsm/sarama-cluster v2.1.15+incompatible
 	github.com/cheekybits/genny v1.0.0
 	github.com/cheggaaa/pb/v3 v3.0.5
@@ -24,6 +25,7 @@ require (
 	github.com/gosuri/uilive v0.0.4 // indirect
 	github.com/gosuri/uiprogress v0.0.1
 	github.com/hashicorp/consul/api v1.3.0
+	github.com/hashicorp/go-getter v1.5.2
 	github.com/jinzhu/gorm v1.9.12
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/jordan-wright/email v4.0.1-0.20200917010138-e1c00e156980+incompatible
@@ -38,5 +40,5 @@ require (
 	golang.org/x/net v0.0.0-20200625001655-4c5254603344 // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e
 	golang.org/x/text v0.3.3
-	google.golang.org/grpc v1.33.2
+	google.golang.org/grpc v1.27.1
 )
