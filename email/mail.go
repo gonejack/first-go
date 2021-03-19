@@ -1,14 +1,32 @@
 package main
 
 import (
+	"github.com/davecgh/go-spew/spew"
 	"log"
 	"net/smtp"
+	"os"
 
 	"github.com/jordan-wright/email"
 
 	"github.com/emersion/go-imap"
 	"github.com/emersion/go-imap/client"
 )
+
+func main() {
+	parse()
+}
+
+func parse() {
+	file, err := os.Open("parse.eml")
+	if err != nil {
+		log.Fatal(err)
+	}
+	eml, err := email.NewEmailFromReader(file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	spew.Dump(eml)
+}
 
 func recv() {
 	log.Println("Connecting to server...")
