@@ -1,8 +1,23 @@
 package main
 
-func main() {
-	var c chan int = make(chan int)
+import (
+	"github.com/davecgh/go-spew/spew"
+	"github.com/mitchellh/mapstructure"
+)
 
-	close(c)
-	close(c)
+func main() {
+	type abc struct {
+		Abc string
+		Def int
+	}
+
+	var output abc
+
+	var input = map[string]interface{}{
+		"abc": "text",
+		"def": "123",
+	}
+	spew.Dump(mapstructure.WeakDecode(input, &output))
+
+	spew.Dump(output)
 }

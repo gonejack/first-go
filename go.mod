@@ -32,6 +32,7 @@ require (
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/mbobakov/grpc-consul-resolver v1.4.3
 	github.com/miekg/dns v1.0.14
+	github.com/mitchellh/mapstructure v1.1.2
 	github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da
 	github.com/schollz/progressbar/v3 v3.7.3
 	github.com/sirupsen/logrus v1.7.0
