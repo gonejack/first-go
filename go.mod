@@ -17,7 +17,7 @@ require (
 	github.com/coreos/etcd v2.3.8+incompatible
 	github.com/davecgh/go-spew v1.1.1
 	github.com/emersion/go-imap v1.0.6
-	github.com/gin-gonic/gin v1.6.3
+	github.com/gin-gonic/gin v1.7.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.3 // indirect
