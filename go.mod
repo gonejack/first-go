@@ -6,8 +6,10 @@ require (
 	gioui.org v0.0.0-20200527151211-266b01bb5d54
 	github.com/ClickHouse/clickhouse-go v1.4.3
 	github.com/Jeffail/gabs/v2 v2.6.0
-	github.com/Shopify/sarama v1.22.1
+	github.com/Shopify/sarama v1.26.0
 	github.com/SlyMarbo/rss v1.0.1
+	github.com/ThreeDotsLabs/watermill v1.0.2
+	github.com/ThreeDotsLabs/watermill-kafka/v2 v2.2.1
 	github.com/apache/pulsar-client-go v0.3.0
 	github.com/bamzi/jobrunner v1.0.0
 	github.com/bmaupin/go-epub v0.5.3
@@ -17,7 +19,7 @@ require (
 	github.com/coreos/etcd v2.3.8+incompatible
 	github.com/davecgh/go-spew v1.1.1
 	github.com/emersion/go-imap v1.0.6
-	github.com/gin-gonic/gin v1.7.0
+	github.com/gin-gonic/gin v1.6.3
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.3 // indirect
@@ -31,8 +33,7 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/mbobakov/grpc-consul-resolver v1.4.3
-	github.com/miekg/dns v1.1.25
-	github.com/mitchellh/mapstructure v1.1.2
+	github.com/miekg/dns v1.0.14
 	github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da
 	github.com/schollz/progressbar/v3 v3.7.3
 	github.com/sirupsen/logrus v1.7.0

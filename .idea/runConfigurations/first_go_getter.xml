@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="first-go/getter" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="first-go" />
+    <working_directory value="$PROJECT_DIR$" />
+    <go_parameters value="-race" />
+    <parameters value="-v" />
+    <kind value="PACKAGE" />
+    <package value="first-go/getter" />
+    <directory value="$PROJECT_DIR$/" />
+    <filePath value="$PROJECT_DIR$/main/main.go" />
+    <output_directory value="$PROJECT_DIR$/bin" />
+    <method v="2" />
+  </configuration>
+</component>
