@@ -19,7 +19,7 @@ require (
 	github.com/coreos/etcd v2.3.8+incompatible
 	github.com/davecgh/go-spew v1.1.1
 	github.com/emersion/go-imap v1.0.6
-	github.com/gin-gonic/gin v1.6.3
+	github.com/gin-gonic/gin v1.7.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gofiber/fiber/v2 v2.18.0
 	github.com/gogo/protobuf v1.3.1
@@ -75,7 +75,7 @@ require (
 	github.com/go-playground/form v3.1.4+incompatible // indirect
 	github.com/go-playground/locales v0.13.0 // indirect
 	github.com/go-playground/universal-translator v0.17.0 // indirect
-	github.com/go-playground/validator/v10 v10.2.0 // indirect
+	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/godbus/dbus v0.0.0-20190726142602-4481cbc300e2 // indirect
 	github.com/gofrs/uuid v3.1.0+incompatible // indirect
 	github.com/golang/snappy v0.0.3 // indirect
