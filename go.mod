@@ -39,6 +39,7 @@ require (
 	github.com/schollz/progressbar/v3 v3.7.3
 	github.com/sirupsen/logrus v1.7.0
 	github.com/slyrz/warc v0.0.0-20150806225202-a50edd19b690
+	github.com/vbauerster/mpb/v7 v7.1.3
 	go.uber.org/zap v1.16.0
 	golang.org/x/exp v0.0.0-20200224162631-6cc2880d07d6
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
@@ -49,7 +50,8 @@ require (
 require (
 	cloud.google.com/go v0.45.1 // indirect
 	github.com/99designs/keyring v1.1.5 // indirect
-	github.com/VividCortex/ewma v1.1.1 // indirect
+	github.com/VividCortex/ewma v1.2.0 // indirect
+	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d // indirect
 	github.com/andybalholm/brotli v1.0.2 // indirect
 	github.com/apache/pulsar-client-go/oauth2 v0.0.0-20200715083626-b9f8c5cedefb // indirect
 	github.com/ardielle/ardielle-go v1.5.2 // indirect
@@ -102,7 +104,7 @@ require (
 	github.com/lithammer/shortuuid/v3 v3.0.4 // indirect
 	github.com/mattn/go-colorable v0.1.2 // indirect
 	github.com/mattn/go-isatty v0.0.13 // indirect
-	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/mattn/go-sqlite3 v2.0.1+incompatible // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db // indirect
@@ -119,6 +121,7 @@ require (
 	github.com/prometheus/common v0.10.0 // indirect
 	github.com/prometheus/procfs v0.1.3 // indirect
 	github.com/rcrowley/go-metrics v0.0.0-20190826022208-cac0b30c2563 // indirect
+	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/ugorji/go/codec v1.2.6 // indirect
@@ -134,7 +137,7 @@ require (
 	golang.org/x/image v0.0.0-20190802002840-cff245a6509b // indirect
 	golang.org/x/net v0.0.0-20210510120150-4163338589ed // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
-	golang.org/x/sys v0.0.0-20210806184541-e5e7981a1069 // indirect
+	golang.org/x/sys v0.0.0-20210809222454-d867a43fc93e // indirect
 	golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf // indirect
 	google.golang.org/api v0.9.0 // indirect
 	google.golang.org/appengine v1.6.1 // indirect
