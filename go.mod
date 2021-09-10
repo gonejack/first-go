@@ -17,6 +17,7 @@ require (
 	github.com/cheekybits/genny v1.0.0
 	github.com/cheggaaa/pb/v3 v3.0.5
 	github.com/coreos/etcd v2.3.8+incompatible
+	github.com/creasty/defaults v1.5.2
 	github.com/davecgh/go-spew v1.1.1
 	github.com/emersion/go-imap v1.0.6
 	github.com/gin-gonic/gin v1.7.4
@@ -37,6 +38,7 @@ require (
 	github.com/mitchellh/mapstructure v1.1.2
 	github.com/samuel/go-zookeeper v0.0.0-20190923202752-2cc03de413da
 	github.com/schollz/progressbar/v3 v3.7.3
+	github.com/scylladb/termtables v1.0.0
 	github.com/sirupsen/logrus v1.7.0
 	github.com/slyrz/warc v0.0.0-20150806225202-a50edd19b690
 	github.com/vbauerster/mpb/v7 v7.1.3
@@ -54,6 +56,7 @@ require (
 	github.com/acarl005/stripansi v0.0.0-20180116102854-5a71ef0e047d // indirect
 	github.com/andybalholm/brotli v1.0.2 // indirect
 	github.com/apache/pulsar-client-go/oauth2 v0.0.0-20200715083626-b9f8c5cedefb // indirect
+	github.com/apcera/termtables v0.0.0-20170405184538-bcbc5dc54055 // indirect
 	github.com/ardielle/ardielle-go v1.5.2 // indirect
 	github.com/armon/go-metrics v0.3.2 // indirect
 	github.com/aws/aws-sdk-go v1.15.78 // indirect
