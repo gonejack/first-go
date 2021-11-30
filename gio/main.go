@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: Unlicense OR MIT
+
 package main
 
 // A Gio program that demonstrates Gio widgets. See https://gioui.org for more information.
@@ -16,11 +18,16 @@ import (
 	"time"
 
 	"gioui.org/app"
-	"gioui.org/app/headless"
+	"gioui.org/f32"
 	"gioui.org/font/gofont"
+	"gioui.org/gpu/headless"
+	"gioui.org/io/pointer"
+	"gioui.org/io/router"
 	"gioui.org/io/system"
 	"gioui.org/layout"
 	"gioui.org/op"
+	"gioui.org/op/clip"
+	"gioui.org/op/paint"
 	"gioui.org/text"
 	"gioui.org/unit"
 	"gioui.org/widget"
@@ -30,10 +37,7 @@ import (
 )
 
 var screenshot = flag.String("screenshot", "", "save a screenshot to a file and exit")
-
-type scaledConfig struct {
-	Scale float32
-}
+var disable = flag.Bool("disable", false, "disable all widgets")
 
 type iconAndTextButton struct {
 	theme  *material.Theme
@@ -50,8 +54,7 @@ func main() {
 		log.Fatal(err)
 	}
 	icon = ic
-	progressIncrementer = make(chan int)
-	gofont.Register()
+	progressIncrementer = make(chan float32)
 	if *screenshot != "" {
 		if err := saveScreenshot(*screenshot); err != nil {
 			fmt.Fprintf(os.Stderr, "failed to save screenshot: %v\n", err)
@@ -63,15 +66,16 @@ func main() {
 	go func() {
 		for {
 			time.Sleep(time.Second)
-			progressIncrementer <- 10
+			progressIncrementer <- 0.1
 		}
 	}()
 
 	go func() {
-		w := app.NewWindow(app.Size(unit.Dp(800), unit.Dp(650)))
+		w := app.NewWindow(app.Size(unit.Dp(800), unit.Dp(700)))
 		if err := loop(w); err != nil {
 			log.Fatal(err)
 		}
+		os.Exit(0)
 	}()
 	app.Main()
 }
@@ -84,11 +88,15 @@ func saveScreenshot(f string) error {
 		return err
 	}
 	gtx := layout.Context{
-		Ops:         new(op.Ops),
-		Config:      &scaledConfig{scale},
+		Ops: new(op.Ops),
+		Metric: unit.Metric{
+			PxPerDp: scale,
+			PxPerSp: scale,
+		},
 		Constraints: layout.Exact(sz),
+		Queue:       new(router.Router),
 	}
-	th := material.NewTheme()
+	th := material.NewTheme(gofont.Collection())
 	kitchen(gtx, th)
 	w.Frame(gtx.Ops)
 	img, err := w.Screenshot()
@@ -103,36 +111,62 @@ func saveScreenshot(f string) error {
 }
 
 func loop(w *app.Window) error {
-	th := material.NewTheme()
+	th := material.NewTheme(gofont.Collection())
 
 	var ops op.Ops
 	for {
 		select {
 		case e := <-w.Events():
 			switch e := e.(type) {
-			case system.ClipboardEvent:
-				lineEditor.SetText(e.Text)
 			case system.DestroyEvent:
 				return e.Err
 			case system.FrameEvent:
-				gtx := layout.NewContext(&ops, e.Queue, e.Config, e.Size)
-				for iconButton.Clicked() {
-					w.WriteClipboard(lineEditor.Text())
+				gtx := layout.NewContext(&ops, e)
+				if *disable {
+					gtx = gtx.Disabled()
 				}
-				for flatBtn.Clicked() {
-					w.ReadClipboard()
+				if checkbox.Changed() {
+					if checkbox.Value {
+						transformTime = e.Now
+					} else {
+						transformTime = time.Time{}
+					}
 				}
-				kitchen(gtx, th)
+				transformedKitchen(gtx, th)
 				e.Frame(gtx.Ops)
 			}
 		case p := <-progressIncrementer:
 			progress += p
-			if progress > 100 {
+			if progress > 1 {
 				progress = 0
 			}
 			w.Invalidate()
 		}
 	}
+}
+
+func transformedKitchen(gtx layout.Context, th *material.Theme) layout.Dimensions {
+	if !transformTime.IsZero() {
+		dt := float32(gtx.Now.Sub(transformTime).Seconds())
+		angle := dt * .1
+		op.InvalidateOp{}.Add(gtx.Ops)
+		defer op.Save(gtx.Ops).Load()
+		tr := f32.Affine2D{}
+		tr = tr.Rotate(f32.Pt(300, 20), -angle)
+		scale := 1.0 - dt*.5
+		if scale < 0.5 {
+			scale = 0.5
+		}
+		tr = tr.Scale(f32.Pt(300, 20), f32.Pt(scale, scale))
+		offset := dt * 50
+		if offset > 200 {
+			offset = 200
+		}
+		tr = tr.Offset(f32.Pt(0, offset))
+		op.Affine(tr).Add(gtx.Ops)
+	}
+
+	return kitchen(gtx, th)
 }
 
 var (
@@ -146,17 +180,22 @@ var (
 	iconTextButton    = new(widget.Clickable)
 	iconButton        = new(widget.Clickable)
 	flatBtn           = new(widget.Clickable)
+	disableBtn        = new(widget.Clickable)
 	radioButtonsGroup = new(widget.Enum)
-	list              = &layout.List{
-		Axis: layout.Vertical,
+	list              = &widget.List{
+		List: layout.List{
+			Axis: layout.Vertical,
+		},
 	}
-	progress            = 0
-	progressIncrementer chan int
+	progress            = float32(0)
+	progressIncrementer chan float32
 	green               = true
 	topLabel            = "Hello, Gio"
 	icon                *widget.Icon
 	checkbox            = new(widget.Bool)
 	swtch               = new(widget.Bool)
+	transformTime       time.Time
+	float               = new(widget.Float)
 )
 
 type (
@@ -166,32 +205,32 @@ type (
 
 func (b iconAndTextButton) Layout(gtx layout.Context) layout.Dimensions {
 	return material.ButtonLayout(b.theme, b.button).Layout(gtx, func(gtx C) D {
-		iconAndLabel := layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}
-		textIconSpacer := unit.Dp(5)
+		return layout.UniformInset(unit.Dp(12)).Layout(gtx, func(gtx C) D {
+			iconAndLabel := layout.Flex{Axis: layout.Horizontal, Alignment: layout.Middle}
+			textIconSpacer := unit.Dp(5)
 
-		layIcon := layout.Rigid(func(gtx C) D {
-			return layout.Inset{Right: textIconSpacer}.Layout(gtx, func(gtx C) D {
-				var d D
-				if icon != nil {
-					size := gtx.Px(unit.Dp(56)) - 2*gtx.Px(unit.Dp(16))
-					b.icon.Layout(gtx, unit.Px(float32(size)))
-					d = layout.Dimensions{
-						Size: image.Point{X: size, Y: size},
+			layIcon := layout.Rigid(func(gtx C) D {
+				return layout.Inset{Right: textIconSpacer}.Layout(gtx, func(gtx C) D {
+					var d D
+					if b.icon != nil {
+						size := gtx.Px(unit.Dp(56)) - 2*gtx.Px(unit.Dp(16))
+						gtx.Constraints = layout.Exact(image.Pt(size, size))
+						d = b.icon.Layout(gtx, b.theme.ContrastFg)
 					}
-				}
-				return d
+					return d
+				})
 			})
-		})
 
-		layLabel := layout.Rigid(func(gtx C) D {
-			return layout.Inset{Left: textIconSpacer}.Layout(gtx, func(gtx C) D {
-				l := material.Body1(b.theme, b.word)
-				l.Color = b.theme.Color.InvText
-				return l.Layout(gtx)
+			layLabel := layout.Rigid(func(gtx C) D {
+				return layout.Inset{Left: textIconSpacer}.Layout(gtx, func(gtx C) D {
+					l := material.Body1(b.theme, b.word)
+					l.Color = b.theme.Palette.ContrastFg
+					return l.Layout(gtx)
+				})
 			})
-		})
 
-		return iconAndLabel.Layout(gtx, layIcon, layLabel)
+			return iconAndLabel.Layout(gtx, layIcon, layLabel)
+		})
 	})
 }
 
@@ -211,7 +250,28 @@ func kitchen(gtx layout.Context, th *material.Theme) layout.Dimensions {
 		func(gtx C) D {
 			e := material.Editor(th, lineEditor, "Hint")
 			e.Font.Style = text.Italic
-			return e.Layout(gtx)
+			border := widget.Border{Color: color.NRGBA{A: 0xff}, CornerRadius: unit.Dp(8), Width: unit.Px(2)}
+			return border.Layout(gtx, func(gtx C) D {
+				return layout.UniformInset(unit.Dp(8)).Layout(gtx, e.Layout)
+			})
+		},
+		func(gtx C) D {
+			gtx.Constraints.Min.Y = gtx.Px(unit.Dp(50))
+			gtx.Constraints.Max.Y = gtx.Constraints.Min.Y
+
+			dr := image.Rectangle{Max: gtx.Constraints.Min}
+			defer op.Save(gtx.Ops).Load()
+			paint.LinearGradientOp{
+				Stop1:  layout.FPt(dr.Min),
+				Stop2:  layout.FPt(dr.Max),
+				Color1: color.NRGBA{R: 0x10, G: 0xff, B: 0x10, A: 0xFF},
+				Color2: color.NRGBA{R: 0x10, G: 0x10, B: 0xff, A: 0xFF},
+			}.Add(gtx.Ops)
+			clip.Rect(dr).Add(gtx.Ops)
+			paint.PaintOp{}.Add(gtx.Ops)
+			return layout.Dimensions{
+				Size: gtx.Constraints.Max,
+			}
 		},
 		func(gtx C) D {
 			in := layout.UniformInset(unit.Dp(8))
@@ -227,7 +287,9 @@ func kitchen(gtx layout.Context, th *material.Theme) layout.Dimensions {
 						for button.Clicked() {
 							green = !green
 						}
-						return material.Button(th, button, "Click me!").Layout(gtx)
+						dims := material.Button(th, button, "Click me!").Layout(gtx)
+						pointer.CursorNameOp{Name: pointer.CursorPointer}.Add(gtx.Ops)
+						return dims
 					})
 				}),
 				layout.Rigid(func(gtx C) D {
@@ -238,7 +300,7 @@ func kitchen(gtx layout.Context, th *material.Theme) layout.Dimensions {
 						}
 						btn := material.Button(th, greenButton, l)
 						if green {
-							btn.Background = color.RGBA{A: 0xff, R: 0x9e, G: 0x9d, B: 0x24}
+							btn.Background = color.NRGBA{A: 0xff, R: 0x9e, G: 0x9d, B: 0x24}
 						}
 						return btn.Layout(gtx)
 					})
@@ -247,23 +309,47 @@ func kitchen(gtx layout.Context, th *material.Theme) layout.Dimensions {
 					return in.Layout(gtx, func(gtx C) D {
 						return material.Clickable(gtx, flatBtn, func(gtx C) D {
 							return layout.UniformInset(unit.Dp(12)).Layout(gtx, func(gtx C) D {
-								return layout.Center.Layout(gtx, material.Body1(th, "Flat").Layout)
+								flatBtnText := material.Body1(th, "Flat")
+								if gtx.Queue == nil {
+									flatBtnText.Color.A = 150
+								}
+								return layout.Center.Layout(gtx, flatBtnText.Layout)
 							})
 						})
 					})
 				}),
+				layout.Rigid(material.ProgressCircle(th, progress).Layout),
 			)
 		},
 		material.ProgressBar(th, progress).Layout,
 		func(gtx C) D {
 			return layout.Flex{Alignment: layout.Middle}.Layout(gtx,
 				layout.Rigid(
-					material.CheckBox(th, checkbox, "Checkbox").Layout,
+					material.CheckBox(th, checkbox, "Transform").Layout,
 				),
 				layout.Rigid(func(gtx C) D {
 					return layout.Inset{Left: unit.Dp(16)}.Layout(gtx,
 						material.Switch(th, swtch).Layout,
 					)
+				}),
+				layout.Rigid(func(gtx C) D {
+					return layout.Inset{Left: unit.Dp(16)}.Layout(gtx, func(gtx C) D {
+						text := "enabled"
+						if !swtch.Value {
+							text = "disabled"
+							gtx = gtx.Disabled()
+						}
+						btn := material.Button(th, disableBtn, text)
+						return btn.Layout(gtx)
+					})
+				}),
+				layout.Rigid(func(gtx C) D {
+					return layout.Inset{Left: unit.Dp(16)}.Layout(gtx, func(gtx C) D {
+						if !swtch.Value {
+							return D{}
+						}
+						return material.Loader(th).Layout(gtx)
+					})
 				}),
 			)
 		},
@@ -274,23 +360,21 @@ func kitchen(gtx layout.Context, th *material.Theme) layout.Dimensions {
 				layout.Rigid(material.RadioButton(th, radioButtonsGroup, "r3", "RadioButton3").Layout),
 			)
 		},
+		func(gtx C) D {
+			return layout.Flex{Alignment: layout.Middle}.Layout(gtx,
+				layout.Flexed(1, material.Slider(th, float, 0, 2*math.Pi).Layout),
+				layout.Rigid(func(gtx C) D {
+					return layout.UniformInset(unit.Dp(8)).Layout(gtx,
+						material.Body1(th, fmt.Sprintf("%.2f", float.Value)).Layout,
+					)
+				}),
+			)
+		},
 	}
 
-	return list.Layout(gtx, len(widgets), func(gtx C, i int) D {
+	return material.List(th, list).Layout(gtx, len(widgets), func(gtx C, i int) D {
 		return layout.UniformInset(unit.Dp(16)).Layout(gtx, widgets[i])
 	})
-}
-
-func (s *scaledConfig) Now() time.Time {
-	return time.Now()
-}
-
-func (s *scaledConfig) Px(v unit.Value) int {
-	scale := s.Scale
-	if v.U == unit.UnitPx {
-		scale = 1
-	}
-	return int(math.Round(float64(scale * v.V)))
 }
 
 const longText = `1. I learned from my grandfather, Verus, to use good manners, and to

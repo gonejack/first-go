@@ -36,7 +36,7 @@ func main() {
 	loop := func(db *gorm.DB) *gorm.DB {
 		return db.Where("code in (?)", []string{"L1212", "L1213"})
 	}
-	result := db.Debug().Scopes(loop, loop).First(&product)
+	result := db.Debug().Scopes(loop).First(&product)
 
 	db.Update()
 

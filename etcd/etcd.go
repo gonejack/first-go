@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+
 	"log"
 	"time"
 
-	"github.com/coreos/etcd/client"
+	"go.etcd.io/etcd/client"
 )
 
 func main() {

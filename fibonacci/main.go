@@ -11,8 +11,8 @@ func main() {
 
 func Fibonacci() func() int {
 	a, b := 0, 1
-	return func() (v int) {
-		v, a, b = a, b, a+b
+	return func() (i int) {
+		i, a, b = a, b, a+b
 		return
 	}
 }
